@@ -127,6 +127,7 @@ export const App = () => {
             <Typography.Text
               tag="span"
               view="primary-large"
+              weight="bold"
               style={{ display: "inline-block", marginBottom: 0 }}
             >
               +
@@ -215,6 +216,7 @@ export const App = () => {
             <Typography.Text
               tag="span"
               view="primary-large"
+              weight="bold"
               style={{ display: "inline-block", marginBottom: 0 }}
             >
               +
@@ -230,6 +232,7 @@ export const App = () => {
             <Typography.Text
               tag="span"
               view="primary-large"
+              weight="bold"
               style={{ display: "inline-block", marginBottom: 0 }}
             >
               +
@@ -245,6 +248,7 @@ export const App = () => {
             <Typography.Text
               tag="span"
               view="primary-large"
+              weight="bold"
               style={{ display: "inline-block", marginBottom: 0 }}
             >
               +
