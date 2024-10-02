@@ -1,6 +1,6 @@
 import { ButtonMobile } from "@alfalab/core-components/button/mobile";
 import { Typography } from "@alfalab/core-components/typography";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 import alfa from "./assets/alfa-card.png";
 import { LS, LSKeys } from "./ls";
@@ -13,10 +13,11 @@ import { Underlay } from "@alfalab/core-components/underlay";
 import { StatusBadge } from "@alfalab/core-components/status-badge";
 import { Link } from "@alfalab/core-components/link";
 import { BottomSheet } from "@alfalab/core-components/bottom-sheet";
+import { sendDataToGA } from "./utils/events.ts";
 
 enum Product {
-  Check = "alfa-check",
-  Smart = "alfa-smart",
+  Check = "AlfaCheck",
+  Smart = "AlfaSmart",
 }
 
 export const App = () => {
@@ -25,37 +26,55 @@ export const App = () => {
   const [selectedOption, setSelectedOption] = useState<Product | null>(null);
   const [showSmart, setShowSmart] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [detailsShown, setDetailsShown] = useState(false);
 
-  const submit = useCallback(() => {
+  const clickDetails = () => {
+    window.gtag("event", "sub_hidden_3339_5_click");
+  };
+
+  const clickApprove = () => {
+    window.gtag("event", "alfa_smart_3339_5_approve");
+  };
+
+  const submit = () => {
     setLoading(true);
-    // sendDataToGA({})
-    Promise.resolve().then(() => {
+    sendDataToGA({
+      sub_choice: selectedOption,
+      sub_hidden: detailsShown ? "Yes" : "No",
+    }).then(() => {
       LS.setItem(LSKeys.ShowThx, true);
       setThx(true);
       setLoading(false);
     });
-  }, []);
+  };
 
-  const handleSelection = useCallback(() => {
+  const handleSelection = () => {
     if (selectedOption === Product.Smart) {
+      clickApprove();
       setShowSmart(true);
     }
 
     if (selectedOption === Product.Check) {
       submit();
     }
-  }, [selectedOption]);
+  };
 
-  const handleShowThx = useCallback(() => {
+  const handleShowThx = () => {
     setThx(true);
-  }, []);
+  };
 
   if (thxShow) {
     return <ThxLayout />;
   }
 
   if (showSmart) {
-    return <SmartLayout handleShowThx={handleShowThx} />;
+    return (
+      <SmartLayout
+        handleShowThx={handleShowThx}
+        selectedOption={selectedOption}
+        detailsShown={detailsShown}
+      />
+    );
   }
 
   return (
@@ -273,6 +292,8 @@ export const App = () => {
               view="secondary"
               onClick={(e) => {
                 e.stopPropagation();
+                clickDetails();
+                setDetailsShown(true);
                 setExpanded(!expanded);
               }}
             >
